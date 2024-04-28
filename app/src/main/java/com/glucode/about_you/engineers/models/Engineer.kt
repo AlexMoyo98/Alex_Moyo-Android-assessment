@@ -6,4 +6,6 @@ data class Engineer(
     val defaultImageName: String,
     val quickStats: QuickStats,
     val questions: List<Question>,
-)
+) {
+
+}

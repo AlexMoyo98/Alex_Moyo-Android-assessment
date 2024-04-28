@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
@@ -37,13 +38,20 @@ class QuestionCardView @JvmOverloads constructor(
         set(value) {
             field = value
             value ?: return
-            binding.answers.children.elementAt(value).isSelected = true
+            binding.answers.children.forEachIndexed{index, view ->
+                view.isSelected = (index == value)
+                if (index == value){
+                    view.post{setAnswerVisibilityAndColor(view,index == value)}
+                }
+                setSelection()
+            }
         }
 
     init {
         radius = resources.getDimension(R.dimen.corner_radius_normal)
         elevation = resources.getDimension(R.dimen.elevation_normal)
         setCardBackgroundColor(ContextCompat.getColor(context, R.color.black))
+        setAllTextVisible()
     }
 
     private fun addAnswer(title: String) {
@@ -55,13 +63,43 @@ class QuestionCardView @JvmOverloads constructor(
 
     private fun onAnswerClick(view: View) {
         if (!view.isSelected) {
-            binding.answers.children.filter { it.isSelected }.forEach {
-                it.isSelected = false
+            binding.answers.children.forEachIndexed { index, childView ->
+                childView.isSelected = (childView == view)
+                setAnswerVisibilityAndColor(childView, childView == view)
             }
+        }
+       // view.isSelected = true
+       // setAnswerVisibilityAndColor(view,true)
+
+    }
+    private fun setAllTextVisible(){
+        binding.answers.children.forEach { view ->
+            setAnswerVisibilityAndColor(view, true)
+        }
+    }
+
+    private fun setAnswerVisibilityAndColor(view: View, isSelected: Boolean){
+        view.visibility = View.VISIBLE
+        if (view is TextView){
+            val textColor = if (isSelected){
+                ContextCompat.getColor(context,R.color.white)
+            } else {
+                ContextCompat.getColor(context,R.color.black)
+            }
+            val backgroundColor = if (isSelected){
+                ContextCompat.getColor(context, R.color.text_grey)
+            } else {
+                ContextCompat.getColor(context,android.R.color.transparent)
+            }
+            view.setTextColor(textColor)
+            view.setBackgroundColor(backgroundColor)
         }
     }
 
     private fun setSelection() {
-
+        val selectedView = binding.answers.getChildAt(selection ?: return)
+        selectedView.isSelected = true
+        setAnswerVisibilityAndColor(selectedView,true)
     }
+
 }
