@@ -1,5 +1,7 @@
 package com.glucode.about_you.engineers
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -10,6 +12,7 @@ import com.glucode.about_you.databinding.FragmentEngineersBinding
 import com.glucode.about_you.engineers.models.Engineer
 import com.glucode.about_you.mockdata.MockData
 import com.glucode.about_you.mockdata.MockData.engineers
+import com.squareup.picasso.Picasso
 import java.time.Year
 import java.util.Calendar
 
@@ -18,6 +21,7 @@ data class QuickStats (val joinYear: Int,val coffee: Int, val bugCount: Int)
 data class Engineer(val name: String, val quickStats: QuickStats)
 class EngineersFragment : Fragment() {
     private lateinit var binding: FragmentEngineersBinding
+    private val REQUEST_CODE_GALLERY = 2001
 
     private val mockEngineers = listOf(
         Engineer("Reenen", QuickStats(2015,5400,1000)),
@@ -110,4 +114,18 @@ class EngineersFragment : Fragment() {
         }
         findNavController().navigate(R.id.action_engineersFragment_to_aboutFragment, bundle)
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_GALLERY && resultCode == Activity.RESULT_OK) {
+            if (data != null) {
+                val selectedImageUri = data.data
+                // Handle the selected image URI as needed
+                // For example, you can load it into the profileImage ImageView using Picasso
+
+            }
+        }
+    }
+
+
 }
