@@ -2,11 +2,15 @@ package com.glucode.about_you.engineers
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.*
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
 import com.glucode.about_you.R
 import com.glucode.about_you.databinding.FragmentEngineersBinding
 import com.glucode.about_you.engineers.models.Engineer
@@ -19,9 +23,11 @@ import java.util.Calendar
 
 data class QuickStats (val joinYear: Int,val coffee: Int, val bugCount: Int)
 data class Engineer(val name: String, val quickStats: QuickStats)
-class EngineersFragment : Fragment() {
+class EngineersFragment : Fragment()  {
     private lateinit var binding: FragmentEngineersBinding
     private val REQUEST_CODE_GALLERY = 2001
+    private lateinit var adapter: EngineersRecyclerViewAdapter
+    private lateinit var profileImage: ImageView
 
     private val mockEngineers = listOf(
         Engineer("Reenen", QuickStats(2015,5400,1000)),
@@ -40,6 +46,9 @@ class EngineersFragment : Fragment() {
         binding = FragmentEngineersBinding.inflate(inflater, container, false)
         setHasOptionsMenu(true)
         setUpEngineersList(MockData.engineers)
+        val view = inflater.inflate(R.layout.item_engineer, container, false)
+
+
         return binding.root
     }
 
@@ -115,17 +124,19 @@ class EngineersFragment : Fragment() {
         findNavController().navigate(R.id.action_engineersFragment_to_aboutFragment, bundle)
     }
 
+    private fun openGallery() {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(intent, REQUEST_CODE_GALLERY)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE_GALLERY && resultCode == Activity.RESULT_OK) {
-            if (data != null) {
-                val selectedImageUri = data.data
-                // Handle the selected image URI as needed
-                // For example, you can load it into the profileImage ImageView using Picasso
+        if (requestCode == REQUEST_CODE_GALLERY && resultCode == Activity.RESULT_OK && data != null) {
+            val selectedImageUri = data.data
+            profileImage.setImageURI(selectedImageUri)
 
-            }
+        }
         }
     }
 
 
-}

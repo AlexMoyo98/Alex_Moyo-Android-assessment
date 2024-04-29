@@ -7,7 +7,7 @@
     android:background="?attr/selectableItemBackground">
 
     <ImageView
-        android:id="@+id/profile_image"
+        android:id="@+id/profileImage"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_margin="@dimen/margin_normal"
@@ -29,7 +29,7 @@
         android:layout_marginEnd="@dimen/margin_normal"
         app:layout_constraintBottom_toTopOf="@id/role"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/profile_image"
+        app:layout_constraintStart_toEndOf="@id/profileImage"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
         tools:text="Developer name" />
@@ -45,7 +45,7 @@
         android:textAppearance="?attr/textAppearanceListItem"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/profile_image"
+        app:layout_constraintStart_toEndOf="@id/profileImage"
         app:layout_constraintTop_toBottomOf="@id/name"
         tools:text="Developer role" />
 
